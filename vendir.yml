@@ -1,0 +1,21 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.37.0
+directories:
+
+  #! Product release files
+  - path: vendir/demo-magic
+    contents:
+      - path: .
+        git:
+          depth: 1
+          url: https://github.com/paxtonhare/demo-magic.git
+          ref: master
+  - path: vendir/concourse-pipelines
+    contents:
+      - path: .
+        git:
+          depth: 1
+          url: https://github.com/dashaun-cloud/concourse-pipelines.git
+          ref: main
+               
