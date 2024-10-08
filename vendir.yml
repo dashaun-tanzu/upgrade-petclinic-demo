@@ -11,11 +11,3 @@ directories:
           depth: 1
           url: https://github.com/paxtonhare/demo-magic.git
           ref: master
-  - path: vendir/concourse-pipelines
-    contents:
-      - path: .
-        git:
-          depth: 1
-          url: https://github.com/dashaun-cloud/concourse-pipelines.git
-          ref: main
-               
