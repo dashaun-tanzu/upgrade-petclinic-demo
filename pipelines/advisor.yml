@@ -1,0 +1,107 @@
+---
+resource_types:
+  - name: maven-resource
+    type: registry-image
+    source:
+      repository: nulldriver/maven-resource
+      tag: latest
+
+  - name: git-branches
+    type: registry-image
+    source:
+      repository: aoldershaw/git-branches-resource
+
+resources:
+  - name: every-3-hours
+    type: time
+    icon: clock-outline
+    source:
+      interval: 3h
+
+  - name: branches
+    type: git-branches
+    icon: github
+    source:
+      uri: git@github.com:dashaun-demo/spring-petclinic.git
+      private_key: |
+        ((github-key))
+
+  - name: pipelines
+    type: git
+    icon: pipe
+    source:
+      uri: git@github.com:dashaun-cloud/concourse-pipelines
+      git_config:
+        - name: safe.directory
+          value: '*'
+      private_key: |
+        ((github-key))
+
+  - name: repo
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:dashaun-demo/spring-petclinic.git
+      git_config:
+        - name: safe.directory
+          value: '*'
+      private_key: |
+        ((github-key))
+
+jobs:
+  - name: set-feature-pipelines
+    plan:
+      - in_parallel:
+          - get: branches
+            trigger: true
+          - get: pipelines
+      - load_var: branches
+        file: branches/branches.json
+      - across:
+          - var: branch
+            values: ((.:branches))
+        set_pipeline: ((.:branch.name))
+        file: pipelines/springone/branch.yml
+        vars: { branch: ((.:branch.name)),
+                github-token: ((github-token)),
+                dockerhub-user: ((dockerhub-user)),
+                dockerhub-token: ((dockerhub-token)),
+                github-key: ((github-key)) }
+  - name: spring-application-advisor
+    serial: true
+    public: true
+    plan:
+      - get: every-3-hours
+        trigger: true
+      - get: repo
+        trigger: true
+      - task: spring-application-advisor
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: dashaun/task-runner
+              username: ((dockerhub-user))
+              password: ((dockerhub-token))
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                set +x
+                export GIT_TOKEN_FOR_PRS=((github-token))
+                export ADVISOR_SERVER=http://saa.apps-127-0-0-1.nip.io
+                source "/root/.sdkman/bin/sdkman-init.sh"
+                cd repo
+                sdk use java 21.0.2-graalce
+                set -x
+                git checkout main
+                advisor -version
+                advisor build-config get
+                advisor upgrade-plan get
+                advisor upgrade-plan apply --push

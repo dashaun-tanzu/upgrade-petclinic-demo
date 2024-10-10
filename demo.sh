@@ -43,13 +43,12 @@ function cleanUp(){
   fly -t remix destroy-pipeline -p mux -n
   fly -t remix destroy-pipeline -p main -n
   fly -t remix destroy-pipeline -p spring-app-advisor -n
-  cd vendir/concourse-pipelines
   clear
 }
 
 function setupSaa(){
   displayMessage "Deploy Spring Application Advisor to CI"
-  fly -t remix set-pipeline -p spring-app-advisor -c springone/advisor.yml -v saa-user=$SAA_USER -v saa-pass=$SAA_TOKEN -v github-token=$GIT_TOKEN_FOR_PRS -v dockerhub-user=$DOCKER_USER -v dockerhub-token=$DOCKER_PASS -v github-key="$(cat ~/.ssh/id_rsa)" -n
+  fly -t remix set-pipeline -p spring-app-advisor -c pipelines/advisor.yml -v saa-user=$SAA_USER -v saa-pass=$SAA_TOKEN -v github-token=$GIT_TOKEN_FOR_PRS -v dockerhub-user=$DOCKER_USER -v dockerhub-token=$DOCKER_PASS -v github-key="$(cat ~/.ssh/id_rsa)" -n
   fly -t remix unpause-pipeline -p spring-app-advisor
   fly -t remix trigger-job -j spring-app-advisor/spring-application-advisor > /dev/null 2>&1
 }

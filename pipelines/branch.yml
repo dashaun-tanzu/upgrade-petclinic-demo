@@ -1,0 +1,144 @@
+---
+resources:
+  - name: repo
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:dashaun-demo/spring-petclinic.git
+      private_key: |
+        ((github-key))
+
+      branch: ((branch))
+      fetch_tags: true
+      skip_ssl_verification: true
+
+jobs:
+  - name: tanzu-build-service
+    serial: true
+    public: true
+    plan:
+      - get: repo
+        trigger: true
+      - task: mvnw-clean-package
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: dashaun/task-runner
+              username: ((dockerhub-user))
+              password: ((dockerhub-token))
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                sleep 5
+  - name: integration-test
+    serial: true
+    public: true
+    plan:
+      - get: repo
+        passed: [tanzu-build-service]
+        trigger: true
+      - task: integration-test
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: dashaun/task-runner
+              username: ((dockerhub-user))
+              password: ((dockerhub-token))
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                sleep 5
+  - name: smoke-test
+    serial: true
+    public: true
+    plan:
+      - get: repo
+        passed: [integration-test]
+        trigger: true
+      - task: test-deploy
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: dashaun/task-runner
+              username: ((dockerhub-user))
+              password: ((dockerhub-token))
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                sleep 5
+  - name: e2e-test
+    serial: true
+    public: true
+    plan:
+      - get: repo
+        passed: [smoke-test]
+        trigger: true
+      - task: test-smoke
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: dashaun/task-runner
+              username: ((dockerhub-user))
+              password: ((dockerhub-token))
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                sleep 5
+  - name: cleanup
+    serial: true
+    public: true
+    plan:
+      - get: repo
+        passed: [e2e-test]
+        trigger: true
+      - task: test-smoke
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: dashaun/task-runner
+              username: ((dockerhub-user))
+              password: ((dockerhub-token))
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: /bin/bash
+            args:
+              - -exc
+              - |
+                sleep 5
