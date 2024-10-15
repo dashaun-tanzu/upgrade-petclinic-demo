@@ -58,7 +58,7 @@ jobs:
           - var: branch
             values: ((.:branches))
         set_pipeline: ((.:branch.name))
-        file: pipelines/springone/branch.yml
+        file: pipelines/branch.yml
         vars: { branch: ((.:branch.name)),
                 github-token: ((github-token)),
                 dockerhub-user: ((dockerhub-user)),
