@@ -1,11 +1,5 @@
 ---
 resource_types:
-  - name: maven-resource
-    type: registry-image
-    source:
-      repository: nulldriver/maven-resource
-      tag: latest
-
   - name: git-branches
     type: registry-image
     source:
@@ -22,6 +16,9 @@ resources:
     type: git-branches
     icon: github
     source:
+      git_config:
+        - name: safe.directory
+          value: '*'
       uri: git@github.com:dashaun-demo/spring-petclinic.git
       private_key: |
         ((github-key))
@@ -30,7 +27,7 @@ resources:
     type: git
     icon: pipe
     source:
-      uri: git@github.com:dashaun-cloud/concourse-pipelines
+      uri: git@github.com:dashaun-tanzu/upgrade-petclinic-demo
       git_config:
         - name: safe.directory
           value: '*'
@@ -85,7 +82,7 @@ jobs:
               repository: dashaun/task-runner
               username: ((dockerhub-user))
               password: ((dockerhub-token))
-              tag: latest
+              tag: 0.0.1
           inputs:
             - name: repo
           run:

@@ -2,3 +2,4 @@
 vendir
 .idea
 vendir.lock.yml
+.vendir-tmp*
