@@ -95,6 +95,7 @@ jobs:
                 export ADVISOR_SERVER=http://saa.apps-127-0-0-1.nip.io
                 source "/root/.sdkman/bin/sdkman-init.sh"
                 cd repo
+                sdk install java 21.0.2-graalce
                 sdk use java 21.0.2-graalce
                 set -x
                 git checkout main
