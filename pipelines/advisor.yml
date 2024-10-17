@@ -27,12 +27,12 @@ resources:
     type: git
     icon: pipe
     source:
-      uri: git@github.com:dashaun-tanzu/upgrade-petclinic-demo
       git_config:
         - name: safe.directory
           value: '*'
-      private_key: |
-        ((github-key))
+      password: (( git-password ))
+      uri: https://github.com/dashaun-tanzu/upgrade-petclinic-demo.git
+      username: (( git-username ))
 
   - name: repo
     type: git
