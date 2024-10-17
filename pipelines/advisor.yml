@@ -21,7 +21,7 @@ resources:
           value: '*'
       password: ((github-token))
       skip_ssl_verification: true
-      uri: git@github.com:dashaun-demo/spring-petclinic.git
+      uri: https://github.com/dashaun-demo/spring-petclinic.git
       username: ((git-username))
 
   - name: upgrade-petclinic-demo
@@ -46,7 +46,7 @@ resources:
           value: '*'
       password: ((github-token))
       skip_ssl_verification: true
-      uri: git@github.com:dashaun-demo/spring-petclinic.git
+      uri: https://github.com/dashaun-demo/spring-petclinic.git
       username: ((git-username))
 
 jobs:
