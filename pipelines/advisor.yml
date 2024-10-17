@@ -94,7 +94,7 @@ jobs:
               - |
                 set +x
                 export GIT_TOKEN_FOR_PRS=((github-token))
-                export ADVISOR_SERVER=http://saa.apps-127-0-0-1.nip.io
+                export ADVISOR_SERVER=https://saa-remix.dashaun.live
                 source "/root/.sdkman/bin/sdkman-init.sh"
                 cd repo
                 sdk install java 21.0.2-graalce
