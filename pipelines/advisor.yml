@@ -44,6 +44,7 @@ resources:
           value: '*'
       private_key: |
         ((github-key))
+      skip_ssl_verification: true
       uri: git@github.com:dashaun-demo/spring-petclinic.git
 
 jobs:
