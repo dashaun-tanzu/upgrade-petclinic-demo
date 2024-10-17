@@ -4,13 +4,15 @@ resources:
     type: git
     icon: github
     source:
-      uri: git@github.com:dashaun-demo/spring-petclinic.git
-      private_key: |
-        ((github-key))
-
       branch: ((branch))
       fetch_tags: true
+      git_config:
+        - name: safe.directory
+          value: '*'
+      private_key: |
+        ((github-key))
       skip_ssl_verification: true
+      uri: git@github.com:dashaun-demo/spring-petclinic.git
 
 jobs:
   - name: tanzu-build-service
