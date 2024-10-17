@@ -20,6 +20,7 @@ resources:
         - name: safe.directory
           value: '*'
       password: ((github-token))
+      skip_ssl_verification: true
       uri: git@github.com:dashaun-demo/spring-petclinic.git
       username: ((git-username))
 
@@ -31,6 +32,7 @@ resources:
         - name: safe.directory
           value: '*'
       password: (( git-password ))
+      skip_ssl_verification: true
       uri: https://github.com/dashaun-tanzu/upgrade-petclinic-demo.git
       username: (( git-username ))
 
@@ -43,6 +45,7 @@ resources:
         - name: safe.directory
           value: '*'
       password: ((github-token))
+      skip_ssl_verification: true
       uri: git@github.com:dashaun-demo/spring-petclinic.git
       username: ((git-username))
 
