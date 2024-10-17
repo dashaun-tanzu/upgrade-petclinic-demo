@@ -39,7 +39,7 @@ function talkingPoint() {
 function cleanUp(){
   gh repo delete $TARGET_ORG/$SOURCE_REPO --yes
   gh repo fork $SOURCE_ORG/$SOURCE_REPO --org $TARGET_ORG --default-branch-only
-  fly -t remix login -c http://concourse.apps-127-0-0-1.nip.io/ -u test -p test
+  fly -t remix login -c https://concourse-remix.dashaun.live -u test -p test
   fly -t remix destroy-pipeline -p mux -n
   fly -t remix destroy-pipeline -p main -n
   fly -t remix destroy-pipeline -p spring-app-advisor -n
@@ -49,8 +49,8 @@ function cleanUp(){
 function setupSaa(){
   displayMessage "Deploy Spring Application Advisor to CI"
   fly -t remix set-pipeline -p spring-app-advisor -c pipelines/advisor.yml -v saa-user=$SAA_USER -v saa-pass=$SAA_TOKEN -v github-token=$GIT_TOKEN_FOR_PRS -v dockerhub-user=$DOCKER_USER -v dockerhub-token=$DOCKER_PASS -v github-key="$(cat ~/.ssh/id_rsa)" -n
-#  fly -t remix unpause-pipeline -p spring-app-advisor
-#  fly -t remix trigger-job -j spring-app-advisor/spring-application-advisor > /dev/null 2>&1
+  fly -t remix unpause-pipeline -p spring-app-advisor
+  fly -t remix trigger-job -j spring-app-advisor/spring-application-advisor > /dev/null 2>&1
 }
 
 function displayMessage() {
