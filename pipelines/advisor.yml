@@ -19,9 +19,9 @@ resources:
       git_config:
         - name: safe.directory
           value: '*'
+      password: ((github-token))
       uri: git@github.com:dashaun-demo/spring-petclinic.git
-      private_key: |
-        ((github-key))
+      username: ((git-username))
 
   - name: upgrade-petclinic-demo
     type: git
@@ -42,10 +42,9 @@ resources:
       git_config:
         - name: safe.directory
           value: '*'
-      private_key: |
-        ((github-key))
-      skip_ssl_verification: true
+      password: ((github-token))
       uri: git@github.com:dashaun-demo/spring-petclinic.git
+      username: ((git-user))
 
 jobs:
   - name: set-feature-pipelines
@@ -65,7 +64,7 @@ jobs:
                 github-token: ((github-token)),
                 dockerhub-user: ((dockerhub-user)),
                 dockerhub-token: ((dockerhub-token)),
-                github-key: ((github-key)) }
+                git-username: ((git-username)) }
   - name: spring-application-advisor
     serial: true
     public: true
