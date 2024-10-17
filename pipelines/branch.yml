@@ -11,7 +11,7 @@ resources:
           value: '*'
       password: ((github-token))
       uri: git@github.com:dashaun-demo/spring-petclinic.git
-      username: ((git-user))
+      username: ((git-username))
 
 jobs:
   - name: tanzu-build-service
