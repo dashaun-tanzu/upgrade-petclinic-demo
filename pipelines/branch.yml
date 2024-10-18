@@ -135,7 +135,7 @@ jobs:
               repository: dashaun/task-runner
               username: ((dockerhub-user))
               password: ((dockerhub-token))
-              tag: latest
+              tag: 1.0.4-linux-x86
           inputs:
             - name: repo
           run:
