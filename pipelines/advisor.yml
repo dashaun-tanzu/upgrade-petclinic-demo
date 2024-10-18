@@ -40,8 +40,6 @@ resources:
     type: git
     icon: github
     source:
-      branch: main
-      fetch_tags: true
       git_config:
         - name: safe.directory
           value: '*'
@@ -77,6 +75,7 @@ jobs:
         trigger: true
       - get: repo
         trigger: true
+        params: {depth: 1}
       - task: spring-application-advisor
         privileged: true
         config:
@@ -103,6 +102,7 @@ jobs:
                 sdk install java 21.0.2-graalce
                 sdk use java 21.0.2-graalce
                 set -x
+                git checkout main
                 advisor -version
                 advisor build-config get
                 advisor upgrade-plan get
